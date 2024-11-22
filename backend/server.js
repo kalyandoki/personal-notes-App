@@ -1,25 +1,20 @@
-require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const noteRoutes = require("./routes/noteRoutes");
-
 const app = express();
+const cors = require("cors");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
-// Middleware
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use("/notes", noteRoutes);
+app.get("/", (req, res) => {
+  res.send("Backend is working");
+});
 
-// Database Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on http://localhost:${process.env.PORT}`);
-    });
-  })
-  .catch((error) => console.log("Database connection error:", error));
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
