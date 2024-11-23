@@ -45,7 +45,7 @@ const NoteForm = ({ onSave, editingNote }) => {
         <option value="Personal">Personal</option>
         <option value="Others">Others</option>
       </select>
-      <div className="w-1/4">
+      <div className="md:w-1/4 w-1/2">
         <button
           type="submit"
           className="w-full bg-blue-500 text-black py-2 rounded-md"
