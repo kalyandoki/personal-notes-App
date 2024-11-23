@@ -48,7 +48,7 @@ const NoteForm = ({ onSave, editingNote }) => {
       <div className="w-1/4">
         <button
           type="submit"
-          className="w-full bg-blue-400 text-black py-2 rounded-md"
+          className="w-full bg-blue-500 text-black py-2 rounded-md"
         >
           {editingNote ? "Update Note" : "Add Note"}
         </button>

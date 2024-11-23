@@ -29,7 +29,7 @@ const SearchBar = ({ onSearch }) => {
       </select>
       <button
         onClick={handleSearch}
-        className="bg-blue-400 text-white px-4 py-2 rounded-md"
+        className="bg-blue-500 text-white px-4 py-2 rounded-md"
       >
         Search
       </button>
