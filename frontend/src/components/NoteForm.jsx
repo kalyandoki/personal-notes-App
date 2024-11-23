@@ -1,52 +1,45 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const NoteForm = ({ onSave, currentNote, resetCurrentNote }) => {
-  const [note, setNote] = useState({
-    title: "",
-    description: "",
-    category: "Others",
-  });
-
-  useEffect(() => {
-    if (currentNote) setNote(currentNote);
-  }, [currentNote]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNote({ ...note, [name]: value });
-  };
+const NoteForm = ({ onSave, editingNote }) => {
+  const [title, setTitle] = useState(editingNote?.title || "");
+  const [description, setDescription] = useState(
+    editingNote?.description || ""
+  );
+  const [category, setCategory] = useState(editingNote?.category || "Others");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(note);
-    setNote({ title: "", description: "", category: "Others" });
-    resetCurrentNote();
+    onSave({ title, description, category });
+    setTitle("");
+    setDescription("");
+    setCategory("Others");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white shadow-md rounded-lg p-4 mt-4"
+    >
       <input
         type="text"
-        name="title"
-        value={note.title}
-        onChange={handleChange}
         placeholder="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full mb-2 p-2 border rounded-md"
         required
-        className="border border-gray-300 rounded-md px-4 py-2 w-full"
       />
       <textarea
-        name="description"
-        value={note.description}
-        onChange={handleChange}
         placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="w-full mb-2 p-2 border rounded-md"
+        rows="4"
         required
-        className="border border-gray-300 rounded-md px-4 py-2 w-full"
-      />
+      ></textarea>
       <select
-        name="category"
-        value={note.category}
-        onChange={handleChange}
-        className="border border-gray-300 rounded-md px-4 py-2 w-full"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="w-full mb-2 p-2 border rounded-md"
       >
         <option value="Work">Work</option>
         <option value="Personal">Personal</option>
@@ -54,9 +47,9 @@ const NoteForm = ({ onSave, currentNote, resetCurrentNote }) => {
       </select>
       <button
         type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        className="w-full bg-blue-500 text-white py-2 rounded-md"
       >
-        {currentNote ? "Update Note" : "Add Note"}
+        {editingNote ? "Update Note" : "Add Note"}
       </button>
     </form>
   );

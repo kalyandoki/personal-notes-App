@@ -1,23 +1,38 @@
-const SearchBar = ({ search, setSearch, category, setCategory }) => {
+import { useState } from "react";
+
+const SearchBar = ({ onSearch }) => {
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+
+  const handleSearch = () => {
+    onSearch({ search, category });
+  };
+
   return (
-    <div className="flex flex-col md:flex-row gap-4 mb-6">
+    <div className="flex flex-wrap gap-2 items-center mt-4">
       <input
         type="text"
-        placeholder="Search by title..."
+        placeholder="Search..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="border border-gray-300 rounded-md px-4 py-2 w-full"
+        className="p-2 border rounded-md flex-1"
       />
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className="border border-gray-300 rounded-md px-4 py-2 w-full"
+        className="p-2 border rounded-md"
       >
-        <option value="">All Categories</option>
+        <option value="">All</option>
         <option value="Work">Work</option>
         <option value="Personal">Personal</option>
         <option value="Others">Others</option>
       </select>
+      <button
+        onClick={handleSearch}
+        className="bg-blue-500 text-white px-4 py-2 rounded-md"
+      >
+        Search
+      </button>
     </div>
   );
 };

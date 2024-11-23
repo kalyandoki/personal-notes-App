@@ -1,53 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { getNotes, createNote, updateNote, deleteNote } from "../api";
-import NoteForm from "../components/NoteForm";
+import { useEffect, useState } from "react";
 import NoteList from "../components/NoteList";
+import NoteForm from "../components/NoteForm";
 import SearchBar from "../components/SearchBar";
+import { fetchNotes, createNote, deleteNote, updateNote } from "../api";
 
 const HomePage = () => {
   const [notes, setNotes] = useState([]);
-  const [currentNote, setCurrentNote] = useState(null);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const [editingNote, setEditingNote] = useState(null);
 
-  useEffect(() => {
-    fetchNotes();
-  }, [search, category]);
-
-  const fetchNotes = async () => {
-    const { data } = await getNotes({ search, category });
+  const loadNotes = async (query = {}) => {
+    const data = await fetchNotes(query);
     setNotes(data);
   };
 
   const handleSave = async (note) => {
-    if (note._id) {
-      await updateNote(note._id, note);
+    if (editingNote) {
+      await updateNote(editingNote._id, note);
+      setEditingNote(null);
     } else {
       await createNote(note);
     }
-    fetchNotes();
+    loadNotes();
   };
 
   const handleDelete = async (id) => {
     await deleteNote(id);
-    fetchNotes();
+    loadNotes();
   };
 
+  const handleEdit = (note) => {
+    setEditingNote(note);
+  };
+
+  useEffect(() => {
+    loadNotes();
+  }, []);
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Personal Notes Manager</h1>
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-        category={category}
-        setCategory={setCategory}
-      />
-      <NoteForm
-        onSave={handleSave}
-        currentNote={currentNote}
-        resetCurrentNote={() => setCurrentNote(null)}
-      />
-      <NoteList notes={notes} onEdit={setCurrentNote} onDelete={handleDelete} />
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-2xl font-bold">Personal Notes</h1>
+      <SearchBar onSearch={loadNotes} />
+      <NoteForm onSave={handleSave} editingNote={editingNote} />
+      <NoteList notes={notes} onDelete={handleDelete} onEdit={handleEdit} />
     </div>
   );
 };
